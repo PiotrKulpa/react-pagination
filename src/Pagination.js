@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Pagination = (props) => {
 
@@ -7,9 +7,14 @@ const Pagination = (props) => {
         data = [], 
         perPage = 10,
         path = '',
+        cursorStyle='not-allowed',
+        activeClassName='page-active'
     } = props;
 
+    let history = useHistory();
+
     const[pages, setPages] = useState([]);
+    const[currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         if(data.length > 0) {
@@ -21,20 +26,52 @@ const Pagination = (props) => {
             setPages(pagesData);
         }
         
-    }, [data, perPage])
+    }, [data, perPage]);
+
+    useEffect(() => {
+        history.push(`/${path}?page=${currentPage}&perpage=${perPage}`);
+    }, [currentPage, history, path, perPage]);
+    
+    const currentPageEvent = (page) => {
+        setCurrentPage(page);
+    };
+
+    const next = () => {
+        currentPage < pages.length && setCurrentPage((prev) => prev + 1);
+        
+    };
+
+    const back = () => {
+        currentPage > 1 && setCurrentPage((prev) => prev - 1);
+    };
 
     return (
-        <Router>
+        
             <div>
-                <span onClick>{`<<Back`}</span>
+                <span 
+                    onClick={back}
+                    style={{cursor: currentPage > 1 ? 'pointer' : cursorStyle}}
+                >
+                    {`<<Back`}
+                </span>
                 {pages && pages.length > 0 
                     && pages.map(({index, page}) => 
-                    <Link key={index} to={`/${path}?page=${page}&perpage=${perPage}`}>
+                    <span 
+                        key={index} 
+                        onClick={() => currentPageEvent(page)}
+                        className={currentPage === page ? activeClassName : ''}
+                        style={{cursor: 'pointer'}}
+                    >
                         {page}
-                    </Link>)}
-                    <span>{`Next >>`}</span>
+                    </span>)}
+                <span 
+                    onClick={next}
+                    style={{cursor: currentPage < pages.length ? 'pointer' : cursorStyle}}
+                >
+                    {`Next >>`}
+                </span>
             </div>
-        </Router>
+       
     )
 }
 

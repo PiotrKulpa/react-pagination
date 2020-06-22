@@ -3,9 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import Pagination from './Pagination';
 import Posts from './Data';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   return (
+    <Router>
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -22,12 +24,14 @@ function App() {
         </a>
         <Pagination 
           data={Posts}
-          perPage={10}
+          perPage={5}
           path={'blog'}
+          cursorStyle='not-allowed'
+          activeClassName='page-active'
         />
       </header>
-      
     </div>
+    </Router>
   );
 }
 
