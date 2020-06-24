@@ -24,11 +24,11 @@ function App() {
         </a>
         <Pagination 
           data={Posts}
-          perPage={10}
+          perPage={1}
           path={'blog'}
           cursorStyle='not-allowed'
           activeClassName='page-active'
-          show={5}
+          show={50}
         />
       </header>
     </div>

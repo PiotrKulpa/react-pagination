@@ -19,14 +19,15 @@ const Pagination = (props:PaginationProps) => {
         path = '',
         cursorStyle ='not-allowed',
         activeClassName ='page-active',
-        show = 3,
+        show = 5,
     } = props;
 
     let history = useHistory();
 
     const[pages, setPages] = useState([]);
     const[currentPage, setCurrentPage] = useState(1);
-    const[sliceIndicator, setSliceIndicator] = useState(0);
+    const[sliceFrom, setSliceFrom] = useState(0);
+    const[sliceTo, setSliceTo] = useState(0);
 
     useEffect(() => {
         if(data.length > 0) {
@@ -58,15 +59,16 @@ const Pagination = (props:PaginationProps) => {
     };
 
     useEffect(() => {
-        if(currentPage % show === 0 && currentPage > show) {
-            setSliceIndicator(Math.round(currentPage / 2) + 1);
+        if(currentPage >= show) {
+            setSliceFrom(currentPage - Math.round(show / 2));
+            setSliceTo(currentPage + Math.round(show / 2) - 1);
         }
-        else if(currentPage >= show) {
-            setSliceIndicator(Math.round(currentPage / 2));
-        } else {
-            setSliceIndicator(0);
+        else {
+            setSliceFrom(0);
+            setSliceTo(show);
         }
     }, [currentPage, show])
+console.log(sliceFrom, sliceTo);
 
     return (
         
@@ -78,7 +80,7 @@ const Pagination = (props:PaginationProps) => {
                     {`<<Back`}
                 </span>
                 {pages && pages.length > 0 
-                    && pages.slice(sliceIndicator, sliceIndicator + show).map(({index, page}) => 
+                    && pages.slice(sliceFrom, sliceTo).map(({index, page}) => 
                     <span 
                         key={index} 
                         onClick={() => currentPageEvent(page)}
