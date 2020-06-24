@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Pagination = (props) => {
+export interface PaginationProps {  
+    data: [], 
+    perPage: number,
+    path: string,
+    cursorStyle: string,
+    activeClassName: string,
+    show: number, 
+}
+
+
+const Pagination = (props:PaginationProps) => {
 
     const { 
         data = [], 
@@ -21,7 +31,7 @@ const Pagination = (props) => {
     useEffect(() => {
         if(data.length > 0) {
             const numOfPages =  Math.ceil(data.length / perPage);
-            const pagesData = [];
+            const pagesData: any = [];
             for(let x = 0; x < numOfPages; x++) { 
                 pagesData.push({index: x, page: x + 1})
             }
@@ -34,7 +44,7 @@ const Pagination = (props) => {
         history.push(`/${path}?page=${currentPage}&perpage=${perPage}`);
     }, [currentPage, history, path, perPage]);
     
-    const currentPageEvent = (page) => {
+    const currentPageEvent = (page:number) => {
         setCurrentPage(page);
     };
 
