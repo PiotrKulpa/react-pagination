@@ -28,7 +28,7 @@ function App() {
           path={'blog'}
           cursorStyle='not-allowed'
           activeClassName='page-active'
-          show={50}
+          show={4}
         />
       </header>
     </div>

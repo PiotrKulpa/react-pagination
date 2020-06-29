@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export interface PaginationProps {  
+interface PaginationProps {  
     data: [], 
     perPage: number,
     path: string,
     cursorStyle: string,
     activeClassName: string,
     show: number, 
+};
+
+interface Pages {
+    index: number, 
+    page: number
 }
 
 
-const Pagination = (props:PaginationProps) => {
+const Pagination: React.FC<PaginationProps> = (props) => {
 
     const { 
         data = [], 
@@ -24,10 +29,10 @@ const Pagination = (props:PaginationProps) => {
 
     let history = useHistory();
 
-    const[pages, setPages] = useState([]);
-    const[currentPage, setCurrentPage] = useState(1);
-    const[sliceFrom, setSliceFrom] = useState(0);
-    const[sliceTo, setSliceTo] = useState(0);
+    const[pages, setPages] = useState<Pages[]>([]);
+    const[currentPage, setCurrentPage] = useState<number>(1);
+    const[sliceFrom, setSliceFrom] = useState<number>(0);
+    const[sliceTo, setSliceTo] = useState<number>(0);
 
     useEffect(() => {
         if(data.length > 0) {
@@ -68,7 +73,6 @@ const Pagination = (props:PaginationProps) => {
             setSliceTo(show);
         }
     }, [currentPage, show])
-console.log(sliceFrom, sliceTo);
 
     return (
         
@@ -100,4 +104,4 @@ console.log(sliceFrom, sliceTo);
     )
 }
 
-export default Pagination;
+export default memo(Pagination);
